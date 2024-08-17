@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { X } from 'lucide-react';
 import { auth, database, storage } from '../firebaseConfig';
 import { ref, set, get, update, push } from 'firebase/database';
-import { onAuthStateChanged, signInAnonymously } from "firebase/auth";
+import {onAuthStateChanged, signInAnonymously, User} from "firebase/auth";
 import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import Image from 'next/image';
 
@@ -26,8 +26,7 @@ const GlyphGenerator = () => {
     const [friendshipCode, setFriendshipCode] = useState('');
     const [alertMessage, setAlertMessage] = useState('');
     const [images, setImages] = useState([]);
-    const [user, setUser] = useState(null);
-
+    const [user, setUser] = useState<User | null>(null);
 
     const loadUserData = useCallback(async(userId: string) => {
         const userRef = ref(database, `users/${userId}`);
