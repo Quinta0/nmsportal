@@ -75,7 +75,7 @@ const GlyphGenerator = () => {
                 return downloadURL;
             } catch (error) {
                 console.error("Error uploading image: ", error);
-                showAlertMessage(`Failed to upload image: ${error.message}`);
+                showAlertMessage(`Failed to upload image: ${(error as Error).message}`);
                 throw error;
             }
         } else {
