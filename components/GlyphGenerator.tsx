@@ -29,7 +29,7 @@ const GlyphGenerator = () => {
     const [user, setUser] = useState(null);
 
 
-    const loadUserData = useCallback(async(userId) => {
+    const loadUserData = useCallback(async(userId: string) => {
         const userRef = ref(database, `users/${userId}`);
         const snapshot = await get(userRef);
         if (snapshot.exists()) {
