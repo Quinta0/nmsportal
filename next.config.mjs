@@ -5,8 +5,8 @@ const nextConfig = {
         domains: ['nmsportal-9ac18.firebaseapp.com'],
     },
     output: 'export',
-    basePath: '/nmsportal',
-    assetPrefix: '/nmsportal/',
+    basePath: process.env.GITHUB_ACTIONS && '/nmsportal',
+    assetPrefix: process.env.GITHUB_ACTIONS && '/nmsportal/',
 }
 
 module.exports = nextConfig
