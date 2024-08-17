@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,6 +10,7 @@ import { auth, database, storage } from '../firebaseConfig';
 import { ref, set, get, update, push } from 'firebase/database';
 import { onAuthStateChanged, signInAnonymously } from "firebase/auth";
 import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
+import Image from 'next/image';
 
 const glyphs = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
 
@@ -26,6 +27,18 @@ const GlyphGenerator = () => {
     const [alertMessage, setAlertMessage] = useState('');
     const [images, setImages] = useState([]);
     const [user, setUser] = useState(null);
+
+
+    const loadUserData = useCallback(async(userId) => {
+        const userRef = ref(database, `users/${userId}`);
+        const snapshot = await get(userRef);
+        if (snapshot.exists()) {
+            const userData = snapshot.val();
+            setPortalAddress(userData.portalAddress || Array(12).fill('0'));
+            setFriendshipCode(userData.friendshipCode || '');
+        }
+        loadGallery();
+    }, []);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -45,18 +58,7 @@ const GlyphGenerator = () => {
         });
 
         return () => unsubscribe();
-    }, []);
-
-    const loadUserData = async (userId) => {
-        const userRef = ref(database, `users/${userId}`);
-        const snapshot = await get(userRef);
-        if (snapshot.exists()) {
-            const userData = snapshot.val();
-            setPortalAddress(userData.portalAddress || Array(12).fill('0'));
-            setFriendshipCode(userData.friendshipCode || '');
-        }
-        loadGallery();
-    };
+    }, [loadUserData]);
 
     const uploadImage = async (file) => {
         console.log("Starting image upload for file:", file.name);
@@ -319,7 +321,12 @@ const GlyphGenerator = () => {
                     <div className="grid grid-cols-6 gap-2 mb-4">
                         {portalAddress.map((glyph, index) => (
                             <div key={index} className="w-12 h-12 flex items-center justify-center bg-gray-800 rounded">
-                                <img src={`/glyphs/glyph${parseInt(glyph, 16) + 1}.webp`} alt={`Glyph ${glyph}`} className="w-10 h-10" />
+                                <Image
+                                    src={`/glyphs/glyph${parseInt(glyph, 16) + 1}.webp`}
+                                    alt={`Glyph ${glyph}`}
+                                    width={40}
+                                    height={40}
+                                />
                             </div>
                         ))}
                     </div>
@@ -368,7 +375,12 @@ const GlyphGenerator = () => {
                     <div className="grid grid-cols-6 gap-2 mb-4">
                         {portalAddress.map((glyph, index) => (
                             <div key={index} className="w-12 h-12 flex items-center justify-center bg-gray-800 rounded">
-                                <img src={`/glyphs/glyph${parseInt(glyph, 16) + 1}.webp`} alt={`Glyph ${glyph}`} className="w-10 h-10" />
+                                <Image
+                                    src={`/glyphs/glyph${parseInt(glyph, 16) + 1}.webp`}
+                                    alt={`Glyph ${glyph}`}
+                                    width={40}
+                                    height={40}
+                                />
                             </div>
                         ))}
                     </div>
