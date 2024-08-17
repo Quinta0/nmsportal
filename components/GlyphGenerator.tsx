@@ -14,11 +14,23 @@ import Image from 'next/image';
 
 const glyphs = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
 
+interface GalleryItem {
+    id: string;
+    votes: {
+        count: number;
+        users: Record<string, string>;
+    };
+    description: string;
+    tags: string[];
+    creatorId: string;
+    images: string[];
+}
+
+
 const GlyphGenerator = () => {
     const [portalAddress, setPortalAddress] = useState(Array(12).fill('0'));
     const [manualInput, setManualInput] = useState('');
     const [showAlert, setShowAlert] = useState(false);
-    const [gallery, setGallery] = useState([]);
     const [decodedAddress, setDecodedAddress] = useState(null);
     const [description, setDescription] = useState('');
     const [tags, setTags] = useState('');
@@ -27,6 +39,8 @@ const GlyphGenerator = () => {
     const [alertMessage, setAlertMessage] = useState('');
     const [images, setImages] = useState([]);
     const [user, setUser] = useState<User | null>(null);
+    const [gallery, setGallery] = useState<GalleryItem[]>([]);
+
 
     const loadUserData = useCallback(async(userId: string) => {
         const userRef = ref(database, `users/${userId}`);
@@ -93,7 +107,7 @@ const GlyphGenerator = () => {
                 id: key,
                 ...value,
                 votes: value.votes || { count: 0, users: {} }
-            })));
+            }) as GalleryItem[]));
         }
     };
 
