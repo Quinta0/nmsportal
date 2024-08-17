@@ -61,20 +61,26 @@ const GlyphGenerator = () => {
     }, [loadUserData]);
 
     const uploadImage = async (file: Blob) => {
-        console.log("Starting image upload for file:", file.name);
-        const imageRef = storageRef(storage, `images/${Date.now()}_${file.name}`);
+        if (file instanceof File) {
+            console.log("Starting image upload for file:", file.name);
+            const imageRef = storageRef(storage, `images/${Date.now()}_${file.name}`);
 
-        try {
-            console.log("Uploading file...");
-            const snapshot = await uploadBytes(imageRef, file);
-            console.log("File uploaded successfully. Getting download URL...");
-            const downloadURL = await getDownloadURL(snapshot.ref);
-            console.log("Download URL obtained:", downloadURL);
-            return downloadURL;
-        } catch (error) {
-            console.error("Error uploading image: ", error);
-            showAlertMessage(`Failed to upload image: ${error.message}`);
-            throw error;
+
+            try {
+                console.log("Uploading file...");
+                const snapshot = await uploadBytes(imageRef, file);
+                console.log("File uploaded successfully. Getting download URL...");
+                const downloadURL = await getDownloadURL(snapshot.ref);
+                console.log("Download URL obtained:", downloadURL);
+                return downloadURL;
+            } catch (error) {
+                console.error("Error uploading image: ", error);
+                showAlertMessage(`Failed to upload image: ${error.message}`);
+                throw error;
+            }
+        } else {
+            console.error("Invalid file type:", file);
+            showAlertMessage('Invalid file type. Please try again.');
         }
     };
 
