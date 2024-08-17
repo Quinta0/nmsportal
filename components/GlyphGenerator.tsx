@@ -40,15 +40,16 @@ const GlyphGenerator = () => {
         loadGallery();
     }, []);
 
+
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
-                setUser(user);
+                setUser(() => user);
                 await loadUserData(user.uid);
             } else {
                 try {
                     const newUser = await signInAnonymously(auth);
-                    setUser(newUser.user);
+                    setUser(() => newUser.user);
                     await loadUserData(newUser.user.uid);
                 } catch (error) {
                     console.error("Error signing in anonymously:", error);
@@ -66,11 +67,13 @@ const GlyphGenerator = () => {
 
         try {
             console.log("Uploading file...");
-            const snapshot = await uploadBytes(imageRef, file);
-            console.log("File uploaded successfully. Getting download URL...");
-            const downloadURL = await getDownloadURL(snapshot.ref);
-            console.log("Download URL obtained:", downloadURL);
-            return downloadURL;
+            if (file instanceof Blob) {
+                const snapshot = await uploadBytes(imageRef, file);
+                console.log("File uploaded successfully. Getting download URL...");
+                const downloadURL = await getDownloadURL(snapshot.ref);
+                console.log("Download URL obtained:", downloadURL);
+                return downloadURL;
+            }
         } catch (error) {
             console.error("Error uploading image: ", error);
             showAlertMessage(`Failed to upload image: ${error.message}`);
