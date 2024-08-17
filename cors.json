@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CorsConfig>
+  <Cors>
+    <Origins>
+      <Origin>http://localhost:3000</Origin>
+    </Origins>
+    <Methods>
+      <Method>GET</Method>
+      <Method>POST</Method>
+      <Method>PUT</Method>
+      <Method>DELETE</Method>
+      <Method>OPTIONS</Method>
+    </Methods>
+    <ResponseHeaders>
+      <ResponseHeader>*</ResponseHeader>
+    </ResponseHeaders>
+    <MaxAgeSec>3600</MaxAgeSec>
+  </Cors>
+</CorsConfig>
