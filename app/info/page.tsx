@@ -49,7 +49,7 @@ export default function InfoPage() {
                     <p>Your NMS friendship code is used to identify your contributions to the gallery and to prevent duplicate voting. It's not shared publicly and is only used within the tool.</p>
                 </section>
                 <Separator className="mb-8"/>
-                <section>
+                <section className="mb-8">
                     <h2 className="text-2xl font-semibold mb-4">How Portal Addresses Work</h2>
                     <p>In No Man's Sky, portal addresses consist of 12 glyphs chosen from a set of 16 possible glyphs. The first glyph represents the planetary index, the next two the solar system index, followed by one for the planet index, and the remaining eight for specific X, Y, and Z coordinates within that system. By inputting a specific sequence of glyphs, players can teleport to corresponding locations across the vast game world.</p>
                 </section>
