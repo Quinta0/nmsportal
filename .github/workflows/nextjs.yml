@@ -88,7 +88,9 @@ jobs:
           NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}
           NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}
           NEXT_PUBLIC_FIREBASE_DATABASE_URL: ${{ secrets.NEXT_PUBLIC_FIREBASE_DATABASE_URL }}
-        run: ${{ steps.detect-package-manager.outputs.runner }} next build
+        run: |
+          echo "Firebase API Key: $NEXT_PUBLIC_FIREBASE_API_KEY"
+          ${{ steps.detect-package-manager.outputs.runner }} next build
 
   # Deployment job
   deploy:
