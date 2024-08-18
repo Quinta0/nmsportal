@@ -210,7 +210,9 @@ const GlyphGenerator = () => {
             await loadGallery();
         } catch (error) {
             console.error("Error adding to gallery:", error);
-            showAlertMessage(`Failed to add to gallery: ${error.message}`);
+            if (error instanceof Error) {
+                showAlertMessage(`Failed to add to gallery: ${error.message}`);
+            }
         }
     };
 
