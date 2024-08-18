@@ -149,7 +149,7 @@ const GlyphGenerator = () => {
         }
     };
 
-    const saveAddress = (address) => {
+    const saveAddress = (address: string[]) => {
         localStorage.setItem('nmsPortalAddress', JSON.stringify(address));
     };
 
