@@ -159,12 +159,13 @@ const GlyphGenerator = () => {
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files || []);
-        const newImages = files.map((file: Blob) => ({
-            url: URL.createObjectURL(file instanceof Blob ? file : new Blob([file.slice()])),
+        const newImages = files.map((file: File) => ({
+            url: URL.createObjectURL(file),
             file: file
         }));
         setImages([...images, ...newImages]);
     };
+
 
 
     const removeImage = (index) => {
