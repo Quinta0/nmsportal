@@ -140,7 +140,7 @@ const GlyphGenerator = () => {
         saveToFirebase({ portalAddress: newAddress });
     };
 
-    const handleManualInput = (e) => {
+    const handleManualInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const input = e.target.value.toUpperCase();
         setManualInput(input);
         if (input.length === 12 && input.split('').every(char => glyphs.includes(char))) {
