@@ -290,17 +290,17 @@ const GlyphGenerator = () => {
         }
     };
 
-    const handleFriendshipCodeInput = async (e) => {
-        const code = e.target.value;
-        setFriendshipCode(code);
-        if (user) {
-            try {
-                await set(ref(database, `users/${user.uid}/friendshipCode`), code);
-            } catch (error) {
-                console.error("Error saving friendship code:", error);
-            }
+    const handleFriendshipCodeInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const code = e.target.value;
+    setFriendshipCode(code);
+    if (user) {
+        try {
+            await set(ref(database, `users/${user.uid}/friendshipCode`), code);
+        } catch (error) {
+            console.error("Error saving friendship code:", error);
         }
-    };
+    }
+};
 
     const showAlertMessage = (message) => {
         setAlertMessage(message);
