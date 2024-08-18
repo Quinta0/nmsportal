@@ -335,7 +335,7 @@ const GlyphGenerator = () => {
 
     return (
         <div className="p-4 max-w-3xl mx-auto">
-            <h1 className="text-3xl font-bold mb-6">No Man's Sky Portal Address Tool</h1>
+            <h1 className="text-3xl font-bold mb-6 text-center">No Man's Sky Portal Address Tool</h1>
 
             <div className="mb-4">
                 <Input
@@ -343,12 +343,12 @@ const GlyphGenerator = () => {
                     value={friendshipCode}
                     onChange={handleFriendshipCodeInput}
                     placeholder="Enter your NMS friendship code"
-                    className="mb-2"
+                    className="mb-2 w-full"
                 />
             </div>
 
-            <Tabs defaultValue="generator">
-                <TabsList className="grid w-full grid-cols-3">
+            <Tabs defaultValue="generator" className="w-full">
+                <TabsList className="grid w-full grid-cols-3 mb-4">
                     <TabsTrigger value="generator">Generator</TabsTrigger>
                     <TabsTrigger value="translator">Translator</TabsTrigger>
                     <TabsTrigger value="gallery">Gallery</TabsTrigger>
@@ -358,14 +358,16 @@ const GlyphGenerator = () => {
                     <Button onClick={generateRandomAddress} className="w-full mb-4">
                         Generate Random Address
                     </Button>
-                    <div className="grid grid-cols-6 gap-2 mb-4">
+                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 mb-4">
                         {portalAddress.map((glyph, index) => (
-                            <div key={index} className="w-12 h-12 flex items-center justify-center bg-gray-800 rounded">
+                            <div key={index}
+                                 className="w-full aspect-square flex items-center justify-center bg-gray-800 rounded">
                                 <Image
                                     src={`/glyphs/glyph${parseInt(glyph, 16) + 1}.webp`}
                                     alt={`Glyph ${glyph}`}
                                     width={40}
                                     height={40}
+                                    layout="responsive"
                                 />
                             </div>
                         ))}
@@ -395,7 +397,7 @@ const GlyphGenerator = () => {
                         onChange={handleImageUpload}
                         className="mb-2"
                     />
-                    <ImageGallery images={images} onRemove={removeImage} editable={true} />
+                    <ImageGallery images={images} onRemove={removeImage} editable={true}/>
                     <Button onClick={addToGallery} className="w-full mb-2">
                         Add to Gallery
                     </Button>
@@ -436,13 +438,13 @@ const GlyphGenerator = () => {
                                 {item.images && item.images.length > 0 && (
                                     <img src={item.images[0]} alt="Gallery item" className="w-full h-auto mb-2 rounded" />
                                 )}
-                                <div className="flex items-center justify-between mb-2">
-                                    <div className="flex">
+                                <div className="flex flex-wrap items-center justify-between mb-2">
+                                    <div className="flex flex-wrap">
                                         {(item.address?.split('') || []).map((glyph, index) => (
-                                            <img key={index} src={`/glyphs/glyph${parseInt(glyph, 16) + 1}.webp`} alt={`Glyph ${glyph}`} className="w-8 h-8 mr-1 bg-gray-800 rounded-sm" />
+                                            <img key={index} src={`/glyphs/glyph${parseInt(glyph, 16) + 1}.webp`} alt={`Glyph ${glyph}`} className="w-6 h-6 mr-1 mb-1 bg-gray-800 rounded-sm" />
                                         ))}
                                     </div>
-                                    <div>
+                                    <div className="flex items-center mt-2 sm:mt-0">
                                         <span className="mr-2">{item.votes?.count || 0}</span>
                                         <Button
                                             onClick={() => handleVote(item.id, 'up')}
@@ -463,7 +465,8 @@ const GlyphGenerator = () => {
                                 <p className="text-sm mb-1">{item.description}</p>
                                 <div className="flex flex-wrap gap-1 mb-2">
                                     {item.tags.map((tag, index) => (
-                                        <span key={index} className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
+                                        <span key={index}
+                                              className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
                             {tag}
                         </span>
                                     ))}
@@ -471,7 +474,7 @@ const GlyphGenerator = () => {
                                 {item.creatorId === friendshipCode && (
                                     <Dialog>
                                         <DialogTrigger asChild>
-                                        <Button onClick={() => startEditing(item)}>Edit</Button>
+                                            <Button onClick={() => startEditing(item)}>Edit</Button>
                                         </DialogTrigger>
                                         <DialogContent>
                                             <DialogHeader>
@@ -495,7 +498,7 @@ const GlyphGenerator = () => {
                                                 onChange={handleImageUpload}
                                                 className="mb-2"
                                             />
-                                            <ImageGallery images={images} onRemove={removeImage} editable={true} />
+                                            <ImageGallery images={images} onRemove={removeImage} editable={true}/>
                                             <Button onClick={saveEdit}>Save Changes</Button>
                                         </DialogContent>
                                     </Dialog>
