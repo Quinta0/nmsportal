@@ -34,10 +34,10 @@ const GlyphGenerator = () => {
     const [showAlert, setShowAlert] = useState(false);
     const [description, setDescription] = useState('');
     const [tags, setTags] = useState('');
-    const [editingItem, setEditingItem] = useState(null);
     const [friendshipCode, setFriendshipCode] = useState('');
     const [alertMessage, setAlertMessage] = useState('');
-    const [images, setImages] = useState<{ url: string; file: File; }[]>([]);
+    const [editingItem, setEditingItem] = useState<GalleryItem | null>(null);
+    const [images, setImages] = useState<{ url: string; file: File | null; }[]>([]);
     const [user, setUser] = useState<User | null>(null);
     const [gallery, setGallery] = useState<GalleryItem[]>([]);
 
@@ -74,7 +74,7 @@ const GlyphGenerator = () => {
         return () => unsubscribe();
     }, [loadUserData]);
 
-    const uploadImage = async (file: Blob) => {
+    const uploadImage = async (file: File | null) => {
         if (file instanceof File) {
             console.log("Starting image upload for file:", file.name);
             const imageRef = storageRef(storage, `images/${Date.now()}_${file.name}`);
@@ -259,7 +259,7 @@ const GlyphGenerator = () => {
         }
     };
 
-    const startEditing = (item) => {
+    const startEditing = (item: GalleryItem) => {
         if (item.creatorId !== friendshipCode) {
             showAlertMessage('You can only edit your own posts.');
             return;
@@ -269,7 +269,6 @@ const GlyphGenerator = () => {
         setTags(item.tags.join(', '));
         setImages(item.images.map(url => ({ url, file: null })));
     };
-
     const saveEdit = async () => {
         try {
             const updatedItem = {
@@ -278,7 +277,7 @@ const GlyphGenerator = () => {
                 tags: tags.split(',').map(tag => tag.trim()),
                 images: images.map(img => img.url)
             };
-            await update(ref(database, `gallery/${editingItem.id}`), updatedItem);
+            await update(ref(database, `gallery/${editingItem?.id}`), updatedItem);
             setEditingItem(null);
             setDescription('');
             setTags('');
