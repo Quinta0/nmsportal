@@ -302,7 +302,7 @@ const GlyphGenerator = () => {
     }
 };
 
-    const showAlertMessage = (message) => {
+    const showAlertMessage = (message: string) => {
         setAlertMessage(message);
         setShowAlert(true);
         setTimeout(() => setShowAlert(false), 3000);
