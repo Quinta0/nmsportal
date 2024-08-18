@@ -482,7 +482,7 @@ const GlyphGenerator = () => {
             code = code.slice(0, 9) + '-' + code.slice(9);
         }
 
-        code = code.slice(0, 14);
+        code = code.slice(0, 15);
 
         setFriendshipCode(code);
 
