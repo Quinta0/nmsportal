@@ -32,7 +32,6 @@ const GlyphGenerator = () => {
     const [portalAddress, setPortalAddress] = useState(Array(12).fill('0'));
     const [manualInput, setManualInput] = useState('');
     const [showAlert, setShowAlert] = useState(false);
-    const [decodedAddress, setDecodedAddress] = useState(null);
     const [description, setDescription] = useState('');
     const [tags, setTags] = useState('');
     const [editingItem, setEditingItem] = useState(null);
@@ -159,13 +158,13 @@ const GlyphGenerator = () => {
     };
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    const newImages = files.map(file => ({
-        url: URL.createObjectURL(file instanceof Blob ? file : new Blob([file.slice()])),
-        file: file
-    }));
-    setImages([...images, ...newImages]);
-};
+        const files = Array.from(e.target.files || []);
+        const newImages = files.map((file: Blob) => ({
+            url: URL.createObjectURL(file instanceof Blob ? file : new Blob([file.slice()])),
+            file: file
+        }));
+        setImages([...images, ...newImages]);
+    };
 
 
     const removeImage = (index) => {
