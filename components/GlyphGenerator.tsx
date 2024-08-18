@@ -14,6 +14,8 @@ import Image from 'next/image';
 import BiDirectionalTranslator from "@/components/BiDirectionalTranslator";
 import TooltipInput from './TooltipInput';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label"
+
 
 const glyphs = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
 
@@ -29,6 +31,7 @@ interface GalleryItem {
     images: string[];
     address: string;
     galaxy: string;
+    createdAt: string;
 }
 
 interface ImageGalleryProps {
@@ -174,6 +177,27 @@ const GlyphGenerator = () => {
     const [gallery, setGallery] = useState<GalleryItem[]>([]);
     const [selectedGalaxy, setSelectedGalaxy] = useState(galaxies[0]);
     const [editingGalaxy, setEditingGalaxy] = useState(galaxies[0]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filterGalaxy, setFilterGalaxy] = useState('All');
+    const [sortBy, setSortBy] = useState('votes');
+    const [filteredGallery, setFilteredGallery] = useState<GalleryItem[]>([]);
+
+    useEffect(() => {
+        const filtered = gallery.filter(item =>
+            (item.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))) &&
+            (filterGalaxy === 'All' || item.galaxy === filterGalaxy)
+        );
+
+        const sorted = [...filtered].sort((a, b) => {
+            if (sortBy === 'votes') return (b.votes?.count || 0) - (a.votes?.count || 0);
+            if (sortBy === 'recent') return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+            if (sortBy === 'oldest') return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+            return 0;
+        });
+
+        setFilteredGallery(sorted);
+    }, [gallery, searchTerm, filterGalaxy, sortBy]);
 
     const getGlyphImagePath = (glyph: string) => {
         const basePath = process.env.NODE_ENV === 'production' ? '/nmsportal' : '';
@@ -340,7 +364,8 @@ const GlyphGenerator = () => {
                 tags: tags.split(',').map(tag => tag.trim()),
                 creatorId: friendshipCode,
                 images: imageUrls,
-                galaxy: selectedGalaxy === "Not Specified" ? null : selectedGalaxy
+                galaxy: selectedGalaxy === "Not Specified" ? null : selectedGalaxy,
+                createdAt: new Date().toISOString()
             };
 
             console.log("New gallery item:", newGalleryItem);
@@ -593,9 +618,50 @@ const GlyphGenerator = () => {
                 </TabsContent>
 
                 <TabsContent value="gallery">
+                    <div className="space-y-4 mb-4">
+                        <Input
+                            type="text"
+                            placeholder="Search by description or tags"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="mb-2"
+                        />
+                        <div className="flex space-x-2">
+                            <div className="flex-1">
+                                <Label htmlFor="galaxy-filter">Filter by Galaxy</Label>
+                                <Select value={filterGalaxy} onValueChange={setFilterGalaxy}>
+                                    <SelectTrigger id="galaxy-filter">
+                                        <SelectValue placeholder="Select galaxy" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="All">All Galaxies</SelectItem>
+                                        {galaxies.map((galaxy) => (
+                                            <SelectItem key={galaxy} value={galaxy}>
+                                                {galaxy}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="flex-1">
+                                <Label htmlFor="sort-by">Sort by</Label>
+                                <Select value={sortBy} onValueChange={setSortBy}>
+                                    <SelectTrigger id="sort-by">
+                                        <SelectValue placeholder="Sort by" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="votes">Most Upvoted</SelectItem>
+                                        <SelectItem value="recent">Most Recent</SelectItem>
+                                        <SelectItem value="oldest">Oldest</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+                    </div>
                     <div className="space-y-4">
-                        {gallery.map(item => (
+                        {filteredGallery.map(item => (
                             <div key={item.id} className="bg-gray-100 p-3 rounded">
+                                {/* The rest of your existing gallery item rendering code */}
                                 {item.images && item.images.length > 0 && (
                                     <img src={item.images[0]} alt="Gallery item"
                                          className="w-full h-auto mb-2 rounded"/>
