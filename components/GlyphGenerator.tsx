@@ -48,6 +48,10 @@ const GlyphGenerator = () => {
     const [user, setUser] = useState<User | null>(null);
     const [gallery, setGallery] = useState<GalleryItem[]>([]);
 
+    const getGlyphImagePath = (glyph: string) => {
+        const basePath = process.env.NODE_ENV === 'production' ? '/nmsportal' : '';
+        return `${basePath}/glyphs/glyph${parseInt(glyph, 16) + 1}.webp`;
+    };
 
     const loadUserData = useCallback(async(userId: string) => {
         const userRef = ref(database, `users/${userId}`);
@@ -363,7 +367,7 @@ const GlyphGenerator = () => {
                             <div key={index}
                                  className="w-full aspect-square flex items-center justify-center bg-gray-800 rounded">
                                 <Image
-                                    src={`/glyphs/glyph${parseInt(glyph, 16) + 1}.webp`}
+                                    src={getGlyphImagePath(glyph)}
                                     alt={`Glyph ${glyph}`}
                                     width={40}
                                     height={40}
@@ -418,7 +422,7 @@ const GlyphGenerator = () => {
                         {portalAddress.map((glyph, index) => (
                             <div key={index} className="w-12 h-12 flex items-center justify-center bg-gray-800 rounded">
                                 <Image
-                                    src={`/glyphs/glyph${parseInt(glyph, 16) + 1}.webp`}
+                                    src={getGlyphImagePath(glyph)}
                                     alt={`Glyph ${glyph}`}
                                     width={40}
                                     height={40}
@@ -441,7 +445,12 @@ const GlyphGenerator = () => {
                                 <div className="flex flex-wrap items-center justify-between mb-2">
                                     <div className="flex flex-wrap">
                                         {(item.address?.split('') || []).map((glyph, index) => (
-                                            <img key={index} src={`/glyphs/glyph${parseInt(glyph, 16) + 1}.webp`} alt={`Glyph ${glyph}`} className="w-6 h-6 mr-1 mb-1 bg-gray-800 rounded-sm" />
+                                            <img
+                                                key={index}
+                                                src={getGlyphImagePath(glyph)}
+                                                alt={`Glyph ${glyph}`}
+                                                className="w-6 h-6 mr-1 mb-1 bg-gray-800 rounded-sm"
+                                            />
                                         ))}
                                     </div>
                                     <div className="flex items-center mt-2 sm:mt-0">
