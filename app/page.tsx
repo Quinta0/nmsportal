@@ -1,5 +1,4 @@
 "use client"
-import GlyphGenerator from '../components/GlyphGenerator';
 import {
     Dialog,
     DialogContent,
