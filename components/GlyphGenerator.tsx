@@ -11,6 +11,8 @@ import { ref, set, get, update, push } from 'firebase/database';
 import {onAuthStateChanged, signInAnonymously, User} from "firebase/auth";
 import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import Image from 'next/image';
+import BiDirectionalTranslator from "@/components/BiDirectionalTranslator";
+import TooltipInput from './TooltipInput';
 
 const glyphs = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
 
@@ -341,12 +343,13 @@ const GlyphGenerator = () => {
         <div className="p-4 max-w-3xl mx-auto mt-4">
 
             <div className="mb-4">
-                <Input
+                <TooltipInput
                     type="text"
                     value={friendshipCode}
                     onChange={handleFriendshipCodeInput}
                     placeholder="Enter your NMS friendship code"
                     className="mb-2 w-full"
+                    tooltipText="Your unique No Man's Sky friend code used to identify your contributions."
                 />
             </div>
 
@@ -388,11 +391,12 @@ const GlyphGenerator = () => {
                         placeholder="Add a description (optional)"
                         className="mb-2"
                     />
-                    <Input
+                    <TooltipInput
                         value={tags}
                         onChange={(e) => setTags(e.target.value)}
                         placeholder="Add tags, separated by commas (optional)"
                         className="mb-2"
+                        tooltipText="Add descriptive tags to help others find your shared location."
                     />
                     <Input
                         type="file"
@@ -410,28 +414,7 @@ const GlyphGenerator = () => {
                 </TabsContent>
 
                 <TabsContent value="translator">
-                    <Input
-                        type="text"
-                        value={manualInput}
-                        onChange={handleManualInput}
-                        placeholder="Enter 12 character address (0-9, A-F)"
-                        className="mb-4"
-                    />
-                    <div className="grid grid-cols-6 gap-2 mb-4">
-                        {portalAddress.map((glyph, index) => (
-                            <div key={index} className="w-12 h-12 flex items-center justify-center bg-gray-800 rounded">
-                                <Image
-                                    src={getGlyphImagePath(glyph)}
-                                    alt={`Glyph ${glyph}`}
-                                    width={40}
-                                    height={40}
-                                />
-                            </div>
-                        ))}
-                    </div>
-                    <Button onClick={copyToClipboard} className="w-full">
-                        Copy Address
-                    </Button>
+                    <BiDirectionalTranslator />
                 </TabsContent>
 
                 <TabsContent value="gallery">
@@ -524,16 +507,6 @@ const GlyphGenerator = () => {
                 </Alert>
             )}
 
-            <div className="mt-8 p-4 bg-gray-100 rounded">
-                <h2 className="text-lg font-semibold mb-2">How Portal Addresses Work</h2>
-                <p className="text-sm">
-                    In No Man&apos;s Sky, portal addresses consist of 12 glyphs chosen from a set of 16 possible glyphs.
-                    The first glyph represents the planetary index, the next two the solar system index, followed by one
-                    for the planet index, and the remaining eight for specific X, Y, and Z coordinates within that
-                    system. By inputting a specific sequence of glyphs, players can teleport to corresponding locations
-                    across the vast game world.
-                </p>
-            </div>
         </div>
     );
 };

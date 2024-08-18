@@ -12,6 +12,8 @@ import Header from "@/components/Header";
 
 import dynamic from 'next/dynamic'
 import Head from "next/head";
+import Link from "next/link";
+import {Button} from "@/components/ui/button";
 
 const GlyphGenerator = dynamic(() => import('../components/GlyphGenerator'), { ssr: false })
 
@@ -25,23 +27,30 @@ export default function Home() {
           </Head>
           <div className="min-h-screen flex flex-col">
           <Header/>
-          <main className="flex-grow">
-              <GlyphGenerator/>
-          </main>
-          <footer className="bg-muted text-muted-foreground py-6">
-              <div className="container mx-auto px-4 md:px-6 flex flex-col sm:flex-row items-center justify-between">
-                  <p className="text-sm mb-4 sm:mb-0">&copy; 2024 Quinta0. All rights reserved.</p>
-                  <nav className="flex items-center gap-4">
-                      <Dialog>
-                          <DialogTrigger>Licence</DialogTrigger>
-                          <DialogContent>
-                              <DialogHeader>
-                                  <DialogTitle>MIT License</DialogTitle>
-                                  <DialogDescription>
-                                      <p className="font-bold">Copyright (c) 2024 Quinta0</p>
-                                      <p className="mt-2">
-                                          Permission is hereby granted, free of charge, to any person obtaining a copy
-                                          of this software and associated documentation files
+              <main className="flex-grow container mx-auto px-4 py-8">
+                  <div className="mb-4 flex justify-center items-center text-center">
+                      <Link href="/info" className="text-blue-600 hover:underline">
+                          Got questions?
+                      </Link>
+                  </div>
+                  <GlyphGenerator/>
+              </main>
+              <footer className="bg-muted text-muted-foreground py-6">
+                  <div
+                      className="container mx-auto px-4 md:px-6 flex flex-col sm:flex-row items-center justify-between">
+                      <p className="text-sm mb-4 sm:mb-0">&copy; 2024 Quinta0. All rights reserved.</p>
+                      <nav className="flex items-center gap-4">
+                          <Dialog>
+                              <DialogTrigger>Licence</DialogTrigger>
+                              <DialogContent>
+                                  <DialogHeader>
+                                      <DialogTitle>MIT License</DialogTitle>
+                                      <DialogDescription>
+                                          <p className="font-bold">Copyright (c) 2024 Quinta0</p>
+                                          <p className="mt-2">
+                                              Permission is hereby granted, free of charge, to any person obtaining a
+                                              copy
+                                              of this software and associated documentation files
                                           (the &quot;Software&quot;), to
                                           deal
                                           in the Software without restriction, including without limitation the rights
