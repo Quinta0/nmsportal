@@ -216,7 +216,7 @@ const GlyphGenerator = () => {
         }
     };
 
-    const handleVote = async (id, voteType) => {
+    const handleVote = async (id: string, voteType: string) => {
         if (!friendshipCode) {
             showAlertMessage('Please enter your NMS friendship code to vote.');
             return;
