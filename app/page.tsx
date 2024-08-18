@@ -21,7 +21,7 @@ export default function Home() {
           </main>
           <footer className="bg-muted text-muted-foreground py-6">
               <div className="container mx-auto px-4 md:px-6 flex flex-col sm:flex-row items-center justify-between">
-                  <p className="text-sm mb-4 sm:mb-0">&copy; 2024 Quintavalle Pietro. All rights reserved.</p>
+                  <p className="text-sm mb-4 sm:mb-0">&copy; 2024 Quinta0. All rights reserved.</p>
                   <nav className="flex items-center gap-4">
                       <Dialog>
                           <DialogTrigger>Licence</DialogTrigger>
@@ -29,7 +29,7 @@ export default function Home() {
                               <DialogHeader>
                                   <DialogTitle>MIT License</DialogTitle>
                                   <DialogDescription>
-                                      <p className="font-bold">Copyright (c) 2024 Quintavalle Pietro</p>
+                                      <p className="font-bold">Copyright (c) 2024 Quinta0</p>
                                       <p className="mt-2">
                                           Permission is hereby granted, free of charge, to any person obtaining a copy
                                           of this software and associated documentation files
