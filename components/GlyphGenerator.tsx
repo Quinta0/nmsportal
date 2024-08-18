@@ -168,7 +168,7 @@ const GlyphGenerator = () => {
 
 
 
-    const removeImage = (index) => {
+    const removeImage = (index:number) => {
         const newImages = [...images];
         newImages.splice(index, 1);
         setImages(newImages);
