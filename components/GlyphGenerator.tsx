@@ -122,16 +122,16 @@ const GlyphGenerator = () => {
         }
     };
 
-    const saveToFirebase = async (data) => {
+    const saveToFirebase = async (data: Record<string, any>) => {
         if (user) {
             try {
                 await update(ref(database, `users/${user.uid}`), data);
             } catch (error) {
-                console.error("Error saving to Firebase:", error);
-                showAlertMessage('Failed to save. Please try again.');
+                console.error(error);
             }
         }
     };
+
 
     const generateRandomAddress = () => {
         const newAddress = Array(12).fill(0).map(() => glyphs[Math.floor(Math.random() * glyphs.length)]);
