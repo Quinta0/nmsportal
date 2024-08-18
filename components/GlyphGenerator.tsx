@@ -24,6 +24,7 @@ interface GalleryItem {
     tags: string[];
     creatorId: string;
     images: string[];
+    address: string;
 }
 
 
@@ -105,10 +106,11 @@ const GlyphGenerator = () => {
             const galleryData = snapshot.val();
             setGallery(Object.entries(galleryData).map(([key, value]) => {
                 if (typeof value === 'object' && value !== null) {
+                    const item = value as { votes?: { count: number, users: object } };
                     return {
                         id: key,
-                        ...value,
-                        votes: value.votes || { count: 0, users: {} }
+                        ...item,
+                        votes: item.votes || { count: 0, users: {} }
                     };
                 } else {
                     return {
@@ -117,7 +119,6 @@ const GlyphGenerator = () => {
                     };
                 }
             }) as GalleryItem[]);
-
         }
     };
 
@@ -429,7 +430,7 @@ const GlyphGenerator = () => {
                                 )}
                                 <div className="flex items-center justify-between mb-2">
                                     <div className="flex">
-                                        {item.address.split('').map((glyph, index) => (
+                                        {(item.address?.split('') || []).map((glyph, index) => (
                                             <img key={index} src={`/glyphs/glyph${parseInt(glyph, 16) + 1}.webp`} alt={`Glyph ${glyph}`} className="w-8 h-8 mr-1 bg-gray-800 rounded-sm" />
                                         ))}
                                     </div>
