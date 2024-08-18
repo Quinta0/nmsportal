@@ -38,7 +38,7 @@ const GlyphGenerator = () => {
     const [editingItem, setEditingItem] = useState(null);
     const [friendshipCode, setFriendshipCode] = useState('');
     const [alertMessage, setAlertMessage] = useState('');
-    const [images, setImages] = useState([]);
+    const [images, setImages] = useState<{ url: string; file: File; }[]>([]);
     const [user, setUser] = useState<User | null>(null);
     const [gallery, setGallery] = useState<GalleryItem[]>([]);
 
@@ -159,13 +159,13 @@ const GlyphGenerator = () => {
     };
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const files = Array.from(e.target.files || []);
-        const newImages = files.map(file => ({
-            url: URL.createObjectURL(file instanceof Blob ? file : new Blob([file])),
-            file: file
-        }));
-        setImages([...images, ...newImages]);
-    };
+    const files = Array.from(e.target.files || []);
+    const newImages = files.map(file => ({
+        url: URL.createObjectURL(file instanceof Blob ? file : new Blob([file.slice()])),
+        file: file
+    }));
+    setImages([...images, ...newImages]);
+};
 
 
     const removeImage = (index) => {
