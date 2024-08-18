@@ -13,14 +13,19 @@ const firebaseConfig = {
     databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL
 };
 
-console.log('Firebase Config:', firebaseConfig);
+console.log('Firebase Config:', JSON.stringify(firebaseConfig, null, 2));
 
-// Initialize Firebase
 let app;
 if (!getApps().length) {
-    app = initializeApp(firebaseConfig);
+    try {
+        app = initializeApp(firebaseConfig);
+        console.log('Firebase initialized successfully');
+    } catch (error) {
+        console.error('Error initializing Firebase:', error);
+    }
 } else {
     app = getApps()[0];
+    console.log('Using existing Firebase app');
 }
 
 const auth = getAuth(app);
