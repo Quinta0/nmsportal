@@ -107,7 +107,7 @@ const GlyphGenerator = () => {
                 id: key,
                 ...value,
                 votes: value.votes || { count: 0, users: {} }
-            }) as GalleryItem[]));
+            })) as GalleryItem[]);
         }
     };
 
@@ -147,14 +147,15 @@ const GlyphGenerator = () => {
         showAlertMessage('Address copied to clipboard.');
     };
 
-    const handleImageUpload = (e) => {
-        const files = Array.from(e.target.files);
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = Array.from(e.target.files || []);
         const newImages = files.map(file => ({
-            url: URL.createObjectURL(file),
+            url: URL.createObjectURL(file instanceof Blob ? file : new Blob([file])),
             file: file
         }));
         setImages([...images, ...newImages]);
     };
+
 
     const removeImage = (index) => {
         const newImages = [...images];
@@ -208,7 +209,7 @@ const GlyphGenerator = () => {
             return;
         }
         const itemToVote = gallery.find(item => item.id === id);
-        if (itemToVote.creatorId === friendshipCode) {
+        if (!(itemToVote) || itemToVote.creatorId === friendshipCode) {
             showAlertMessage('You cannot vote for your own posts.');
             return;
         }
