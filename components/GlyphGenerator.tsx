@@ -173,6 +173,7 @@ const GlyphGenerator = () => {
     const [user, setUser] = useState<User | null>(null);
     const [gallery, setGallery] = useState<GalleryItem[]>([]);
     const [selectedGalaxy, setSelectedGalaxy] = useState(galaxies[0]);
+    const [editingGalaxy, setEditingGalaxy] = useState(galaxies[0]);
 
     const getGlyphImagePath = (glyph: string) => {
         const basePath = process.env.NODE_ENV === 'production' ? '/nmsportal' : '';
@@ -415,23 +416,27 @@ const GlyphGenerator = () => {
             return;
         }
         setEditingItem(item);
-        setDescription(item.description);
-        setTags(item.tags.join(', '));
-        setImages(item.images.map(url => ({ url, file: null })));
+        setDescription(item.description || '');
+        setTags(item.tags?.join(', ') || '');
+        setImages(item.images?.map(url => ({ url, file: null })) || []);
+        setEditingGalaxy(item.galaxy || galaxies[0]);
     };
+
     const saveEdit = async () => {
         try {
             const updatedItem = {
                 ...editingItem,
                 description: description,
                 tags: tags.split(',').map(tag => tag.trim()),
-                images: images.map(img => img.url)
+                images: images.map(img => img.url),
+                galaxy: editingGalaxy === "Not Specified" ? null : editingGalaxy
             };
             await update(ref(database, `gallery/${editingItem?.id}`), updatedItem);
             setEditingItem(null);
             setDescription('');
             setTags('');
             setImages([]);
+            setEditingGalaxy(galaxies[0]);
             showAlertMessage('Address details updated successfully.');
             loadGallery(); // Reload the gallery to reflect the changes
         } catch (error) {
@@ -441,8 +446,21 @@ const GlyphGenerator = () => {
     };
 
     const handleFriendshipCodeInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const code = e.target.value;
+        let code = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
+
+        code = code.replace(/-/g, '');
+
+        if (code.length > 4) {
+            code = code.slice(0, 4) + '-' + code.slice(4);
+        }
+        if (code.length > 9) {
+            code = code.slice(0, 9) + '-' + code.slice(9);
+        }
+
+        code = code.slice(0, 14);
+
         setFriendshipCode(code);
+
         if (user) {
             try {
                 await set(ref(database, `users/${user.uid}/friendshipCode`), code);
@@ -642,6 +660,18 @@ const GlyphGenerator = () => {
                                                 placeholder="Edit tags, separated by commas"
                                                 className="mb-2"
                                             />
+                                            <Select value={editingGalaxy} onValueChange={setEditingGalaxy}>
+                                                <SelectTrigger className="w-full mb-2">
+                                                    <SelectValue placeholder="Select galaxy (optional)" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {galaxies.map((galaxy) => (
+                                                        <SelectItem key={galaxy} value={galaxy}>
+                                                            {galaxy}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
                                             <Input
                                                 type="file"
                                                 multiple
