@@ -6,6 +6,7 @@ import {Button} from "@/components/ui/button";
 import {router} from "next/client";
 import {useRouter} from "next/navigation";
 import { ChevronsLeft } from 'lucide-react';
+import Link from "next/link";
 
 export default function InfoPage() {
     const router = useRouter();
@@ -56,7 +57,7 @@ export default function InfoPage() {
                 <Separator className="mb-8"/>
                 <section>
                     <h2 className="text-2xl font-semibold mb-4">Special Thanks</h2>
-                    <p>Thanks to the The Games Hub and the No Man's Sky community for their support and inspiration.</p>
+                    <p>Thanks to the <Link href="https://www.youtube.com/@TheGameHubNMS" className="underline">The Game Hub</Link> and the No Man's Sky community for their support and inspiration.</p>
                     <p>And to Rask Rex for helping me with lots of feedback!</p>
                 </section>
             </main>
