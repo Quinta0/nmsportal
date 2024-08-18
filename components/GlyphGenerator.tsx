@@ -116,7 +116,7 @@ const GlyphGenerator = () => {
         const snapshot = await get(galleryRef);
         if (snapshot.exists()) {
             const galleryData = snapshot.val();
-            setGallery(Object.entries(galleryData).map(([key, value]) => {
+            const galleryItems = Object.entries(galleryData).map(([key, value]) => {
                 if (typeof value === 'object' && value !== null) {
                     const item = value as { votes?: { count: number, users: object } };
                     return {
@@ -130,7 +130,13 @@ const GlyphGenerator = () => {
                         votes: { count: 0, users: {} }
                     };
                 }
-            }) as GalleryItem[]);
+            }) as GalleryItem[];
+
+            galleryItems.sort((a, b) => (b.votes?.count || 0) - (a.votes?.count || 0));
+
+            setGallery(galleryItems);
+        } else {
+            setGallery([]);
         }
     };
 
@@ -235,37 +241,43 @@ const GlyphGenerator = () => {
             return;
         }
         const itemToVote = gallery.find(item => item.id === id);
-        if (!(itemToVote) || itemToVote.creatorId === friendshipCode) {
+        if (!itemToVote || itemToVote.creatorId === friendshipCode) {
             showAlertMessage('You cannot vote for your own posts.');
             return;
         }
         try {
             const itemRef = ref(database, `gallery/${id}`);
             const snapshot = await get(itemRef);
-            const currentVotes = snapshot.val().votes || { count: 0, users: {} };
-            const userCurrentVote = currentVotes.users[friendshipCode];
+            if (!snapshot.exists()) {
+                showAlertMessage('This item no longer exists.');
+                return;
+            }
+            const itemData = snapshot.val();
+            const currentVotes = itemData.votes || { count: 0, users: {} };
+            const userCurrentVote = currentVotes.users?.[friendshipCode];
 
-            let newVoteCount = currentVotes.count;
+            let newVoteCount = currentVotes.count || 0;
+            let newUserVotes = { ...currentVotes.users };
+
             if (userCurrentVote === voteType) {
-                // User is un-voting
                 newVoteCount -= voteType === 'up' ? 1 : -1;
-                delete currentVotes.users[friendshipCode];
+                delete newUserVotes[friendshipCode];
             } else {
-                // User is changing vote or voting for the first time
                 if (userCurrentVote) {
                     newVoteCount -= userCurrentVote === 'up' ? 1 : -1;
                 }
                 newVoteCount += voteType === 'up' ? 1 : -1;
-                currentVotes.users[friendshipCode] = voteType;
+                newUserVotes[friendshipCode] = voteType;
             }
 
             await update(itemRef, {
                 votes: {
                     count: newVoteCount,
-                    users: currentVotes.users
+                    users: newUserVotes
                 }
             });
-            await loadGallery(); // Reload the gallery to reflect the updated vote
+            await loadGallery();
+            showAlertMessage('Vote recorded successfully.');
         } catch (error) {
             console.error("Error voting:", error);
             showAlertMessage('Failed to vote. Please try again.');
@@ -304,16 +316,16 @@ const GlyphGenerator = () => {
     };
 
     const handleFriendshipCodeInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const code = e.target.value;
-    setFriendshipCode(code);
-    if (user) {
-        try {
-            await set(ref(database, `users/${user.uid}/friendshipCode`), code);
-        } catch (error) {
-            console.error("Error saving friendship code:", error);
+        const code = e.target.value;
+        setFriendshipCode(code);
+        if (user) {
+            try {
+                await set(ref(database, `users/${user.uid}/friendshipCode`), code);
+            } catch (error) {
+                console.error("Error saving friendship code:", error);
+            }
         }
-    }
-};
+    };
 
     const showAlertMessage = (message: string) => {
         setAlertMessage(message);

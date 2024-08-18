@@ -13,8 +13,6 @@ const firebaseConfig = {
     databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL
 };
 
-console.log('Firebase Config:', JSON.stringify(firebaseConfig, null, 2));
-
 let app;
 if (!getApps().length) {
     try {
