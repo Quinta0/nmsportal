@@ -1,17 +1,27 @@
+"use client"
 import React from 'react';
 import Header from '@/components/Header';
 import { Separator } from "@/components/ui/separator";
+import {Button} from "@/components/ui/button";
+import {router} from "next/client";
+import {useRouter} from "next/navigation";
+import { ChevronsLeft } from 'lucide-react';
 
 export default function InfoPage() {
+    const router = useRouter();
     return (
         <div className="min-h-screen flex flex-col">
             <Header />
             <main className="flex-grow container mx-auto px-12 py-8">
-                <h1 className="text-3xl font-bold mb-6">No Man's Sky Portal Address Tool - Information</h1>
+                <div className="flex items-center mb-6">
+                    <ChevronsLeft onClick={() => router.back()} className="mr-4" />
+                    <h1 className="text-3xl font-bold">No Man's Sky Portal Address Tool - Information</h1>
+                </div>
 
                 <section className="mb-8">
                     <h2 className="text-2xl font-semibold mb-4">What is this tool?</h2>
-                    <p>This tool helps No Man's Sky players generate, translate, and share portal addresses. It consists of three main features:</p>
+                    <p>This tool helps No Man's Sky players generate, translate, and share portal addresses. It consists
+                        of three main features:</p>
                     <ul className="list-disc pl-5 mt-2">
                         <li><strong>Generator:</strong> Create random portal addresses or input your own.</li>
                         <li><strong>Translator:</strong> Convert between hexadecimal addresses and glyph symbols.</li>
