@@ -8,6 +8,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import React from "react";
+import Header from "@/components/Header";
 
 import dynamic from 'next/dynamic'
 
@@ -16,6 +17,7 @@ const GlyphGenerator = dynamic(() => import('../components/GlyphGenerator'), { s
 export default function Home() {
   return (
       <div className="min-h-screen flex flex-col">
+          <Header/>
           <main className="flex-grow">
               <GlyphGenerator/>
           </main>

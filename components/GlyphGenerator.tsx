@@ -338,8 +338,7 @@ const GlyphGenerator = () => {
     );
 
     return (
-        <div className="p-4 max-w-3xl mx-auto">
-            <h1 className="text-3xl font-bold mb-6 text-center">No Man's Sky Portal Address Tool</h1>
+        <div className="p-4 max-w-3xl mx-auto mt-4">
 
             <div className="mb-4">
                 <Input
