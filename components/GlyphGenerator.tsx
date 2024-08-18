@@ -27,6 +27,13 @@ interface GalleryItem {
     address: string;
 }
 
+interface ImageGalleryProps {
+    images: { url: string; file: File | null; }[];
+    onRemove: (index: number) => void;
+    editable: boolean;
+}
+
+
 
 const GlyphGenerator = () => {
     const [portalAddress, setPortalAddress] = useState(Array(12).fill('0'));
@@ -308,7 +315,7 @@ const GlyphGenerator = () => {
         setTimeout(() => setShowAlert(false), 3000);
     };
 
-    const ImageGallery = ({ images, onRemove, editable }) => (
+    const ImageGallery: React.FC<ImageGalleryProps> = ({ images, onRemove, editable }) => (
         <div className="grid grid-cols-3 gap-2 mb-2">
             {images.map((image, index) => (
                 <div key={index} className="relative">
