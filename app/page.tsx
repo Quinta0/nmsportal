@@ -11,12 +11,19 @@ import React from "react";
 import Header from "@/components/Header";
 
 import dynamic from 'next/dynamic'
+import Head from "next/head";
 
 const GlyphGenerator = dynamic(() => import('../components/GlyphGenerator'), { ssr: false })
 
 export default function Home() {
   return (
-      <div className="min-h-screen flex flex-col">
+      <>
+          <Head>
+              <title>No Man's Sky Portal Address Tool</title>
+              <link rel="icon" href="/favicon.ico" sizes="any"/>
+              <meta name="description" content="Generate and share portal addresses for No Man's Sky"/>
+          </Head>
+          <div className="min-h-screen flex flex-col">
           <Header/>
           <main className="flex-grow">
               <GlyphGenerator/>
@@ -75,6 +82,7 @@ export default function Home() {
               </div>
           </footer>
       </div>
+        </>
   );
 }
 

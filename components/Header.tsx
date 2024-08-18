@@ -6,7 +6,7 @@ const Header = () => {
             <div className="container mx-auto flex items-center justify-center">
                 <div className="flex items-center">
                     <Image
-                        src="/logo.png"
+                        src="logo.png"
                         alt="No Man's Sky Logo"
                         width={50}
                         height={50}
