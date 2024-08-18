@@ -2,7 +2,7 @@
 const nextConfig = {
     reactStrictMode: true,
     images: {
-        domains: ['your-firebase-storage-domain.com'],
+        domains: ['nmsportal-9ac18.firebaseapp.com'],
         unoptimized: true,
     },
     output: 'export',
