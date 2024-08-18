@@ -103,11 +103,21 @@ const GlyphGenerator = () => {
         const snapshot = await get(galleryRef);
         if (snapshot.exists()) {
             const galleryData = snapshot.val();
-            setGallery(Object.entries(galleryData).map(([key, value]) => ({
-                id: key,
-                ...value,
-                votes: value.votes || { count: 0, users: {} }
-            })) as GalleryItem[]);
+            setGallery(Object.entries(galleryData).map(([key, value]) => {
+                if (typeof value === 'object' && value !== null) {
+                    return {
+                        id: key,
+                        ...value,
+                        votes: value.votes || { count: 0, users: {} }
+                    };
+                } else {
+                    return {
+                        id: key,
+                        votes: { count: 0, users: {} }
+                    };
+                }
+            }) as GalleryItem[]);
+
         }
     };
 
