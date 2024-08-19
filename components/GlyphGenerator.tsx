@@ -15,6 +15,7 @@ import BiDirectionalTranslator from "@/components/BiDirectionalTranslator";
 import TooltipInput from './TooltipInput';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label"
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 
 const glyphs = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
@@ -526,6 +527,24 @@ const GlyphGenerator = () => {
         </div>
     );
 
+    const ImageCarousel = ({ images }: { images: string[] }) => {
+        return (
+            <Carousel className="w-full max-w-xs mx-auto">
+                <CarouselContent>
+                    {images.map((image, index) => (
+                        <CarouselItem key={index}>
+                            <div className="p-1">
+                                <img src={image} alt={`Gallery item ${index + 1}`} className="w-full h-auto rounded" />
+                            </div>
+                        </CarouselItem>
+                    ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+            </Carousel>
+        );
+    };
+
     return (
         <div className="p-4 max-w-3xl mx-auto mt-4">
 
@@ -661,10 +680,8 @@ const GlyphGenerator = () => {
                     <div className="space-y-4">
                         {filteredGallery.map(item => (
                             <div key={item.id} className="bg-gray-100 p-3 rounded">
-                                {/* The rest of your existing gallery item rendering code */}
                                 {item.images && item.images.length > 0 && (
-                                    <img src={item.images[0]} alt="Gallery item"
-                                         className="w-full h-auto mb-2 rounded"/>
+                                    <ImageCarousel images={item.images} />
                                 )}
                                 <div className="flex flex-wrap items-center justify-between mb-2">
                                     <div className="flex flex-wrap">
