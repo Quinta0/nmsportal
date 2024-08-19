@@ -14,9 +14,9 @@ import Image from 'next/image';
 import BiDirectionalTranslator from "@/components/BiDirectionalTranslator";
 import TooltipInput from './TooltipInput';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Label } from "@/components/ui/label"
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-
+import { Label } from "@/components/ui/label";
+import useEmblaCarousel from 'embla-carousel-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const glyphs = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
 
@@ -528,20 +528,56 @@ const GlyphGenerator = () => {
     );
 
     const ImageCarousel = ({ images }: { images: string[] }) => {
+        const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+        const [currentIndex, setCurrentIndex] = useState(0);
+
+        useEffect(() => {
+            if (emblaApi) {
+                emblaApi.on('select', () => {
+                    setCurrentIndex(emblaApi.selectedScrollSnap());
+                });
+            }
+        }, [emblaApi]);
+
+        const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
+        const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
+
         return (
-            <Carousel className="w-full max-w-xs mx-auto">
-                <CarouselContent>
-                    {images.map((image, index) => (
-                        <CarouselItem key={index}>
-                            <div className="p-1">
-                                <img src={image} alt={`Gallery item ${index + 1}`} className="w-full h-auto rounded" />
+            <div className="relative">
+                <div className="overflow-hidden" ref={emblaRef}>
+                    <div className="flex">
+                        {images.map((image, index) => (
+                            <div key={index} className="flex-[0_0_100%] min-w-0">
+                                <img src={image} alt={`Gallery item ${index + 1}`} className="w-full h-auto object-cover aspect-video" />
                             </div>
-                        </CarouselItem>
-                    ))}
-                </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
-            </Carousel>
+                        ))}
+                    </div>
+                </div>
+                {images.length > 1 && (
+                    <>
+                        <button
+                            className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full"
+                            onClick={scrollPrev}
+                        >
+                            <ChevronLeft size={24} />
+                        </button>
+                        <button
+                            className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full"
+                            onClick={scrollNext}
+                        >
+                            <ChevronRight size={24} />
+                        </button>
+                        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1">
+                            {images.map((_, index) => (
+                                <div
+                                    key={index}
+                                    className={`w-2 h-2 rounded-full ${index === currentIndex ? 'bg-white' : 'bg-gray-400'}`}
+                                />
+                            ))}
+                        </div>
+                    </>
+                )}
+            </div>
         );
     };
 
