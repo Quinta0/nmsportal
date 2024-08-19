@@ -548,7 +548,7 @@ const GlyphGenerator = () => {
                     <div className="flex">
                         {images.map((image, index) => (
                             <div key={index} className="flex-[0_0_100%] min-w-0">
-                                <img src={image} alt={`Gallery item ${index + 1}`} className="w-full h-auto object-cover aspect-video" />
+                                <img src={image} alt={`Gallery item ${index + 1}`} className="w-full h-auto object-cover aspect-video mb-2 rounded" />
                             </div>
                         ))}
                     </div>
