@@ -26,6 +26,11 @@ const nextConfig = {
         NEXT_PUBLIC_FIREBASE_APP_ID: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
         NEXT_PUBLIC_FIREBASE_DATABASE_URL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
     },
+    // Add this section to treat all pages as static at build time
+    experimental: {
+        // This will treat all pages as static, without server-side rendering
+        staticPageGenerationTimeout: 1000,
+    },
 }
 
 module.exports = nextConfig

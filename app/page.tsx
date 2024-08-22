@@ -7,21 +7,21 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "@/components/Header";
-
 import dynamic from 'next/dynamic'
 import Head from "next/head";
 import Link from "next/link";
-import {Button} from "@/components/ui/button";
-import { useAuth } from '@/components/AuthProvider';
-import LoginForm from "@/components/LoginForm";
+import { Button } from "@/components/ui/button";
 
-
-const GlyphGenerator = dynamic(() => import('../components/GlyphGenerator'), { ssr: false })
+const DynamicAuthContent = dynamic(() => import('@/components/AuthContent'), { ssr: false });
 
 export default function Home() {
-    const auth = useAuth();
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
 
     return (
         <>
@@ -38,14 +38,7 @@ export default function Home() {
                             Got questions?
                         </Link>
                     </div>
-                    {auth?.user ? (
-                        <>
-                            <Button onClick={auth.logOut} className="mb-4">Log Out</Button>
-                            <GlyphGenerator/>
-                        </>
-                    ) : (
-                        <LoginForm />
-                    )}
+                    {isClient && <DynamicAuthContent />}
                 </main>
                 <footer className="bg-muted text-muted-foreground py-6">
                     <div
