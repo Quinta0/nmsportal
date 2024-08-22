@@ -19,6 +19,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [friendCode, setFriendCode] = useState<string | null>(null);
 
     useEffect(() => {
+        // Ensure that this code only runs in the browser
         if (typeof window !== 'undefined') {
             const unsubscribe = auth.onAuthStateChanged(async (user) => {
                 setUser(user);
