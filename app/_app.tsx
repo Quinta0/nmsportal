@@ -1,10 +1,26 @@
 import type { AppProps } from 'next/app'
-import ErrorBoundary from '../components/ErrorBoundary'
+import { AuthProvider } from '@/components/AuthProvider'
+import ErrorBoundary from "@/components/ErrorBoundary";
 
-export default function App({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }: AppProps) {
+    // Check if we're in a browser environment
+    const isBrowser = typeof window !== 'undefined'
+
     return (
-        <ErrorBoundary>
-            <Component {...pageProps} />
-        </ErrorBoundary>
+        <>
+            {isBrowser ? (
+                <AuthProvider>
+                    <ErrorBoundary>
+                        <Component {...pageProps} />
+                    </ErrorBoundary>
+                </AuthProvider>
+            ) : (
+                <ErrorBoundary>
+                    <Component {...pageProps} />
+                </ErrorBoundary>
+            )}
+        </>
     )
 }
+
+export default MyApp

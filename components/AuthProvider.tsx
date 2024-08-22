@@ -19,19 +19,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [friendCode, setFriendCode] = useState<string | null>(null);
 
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(async (user) => {
-            setUser(user);
-            if (user) {
-                const friendCodeRef = ref(database, `users/${user.uid}/friendCode`);
-                const snapshot = await get(friendCodeRef);
-                if (snapshot.exists()) {
-                    setFriendCode(snapshot.val());
+        if (typeof window !== 'undefined') {
+            const unsubscribe = auth.onAuthStateChanged(async (user) => {
+                setUser(user);
+                if (user) {
+                    const friendCodeRef = ref(database, `users/${user.uid}/friendCode`);
+                    const snapshot = await get(friendCodeRef);
+                    if (snapshot.exists()) {
+                        setFriendCode(snapshot.val());
+                    }
+                } else {
+                    setFriendCode(null);
                 }
-            } else {
-                setFriendCode(null);
-            }
-        });
-        return unsubscribe;
+            });
+            return unsubscribe;
+        }
     }, []);
 
     const signUp = async (email: string, password: string, friendCode: string) => {
@@ -56,11 +58,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     };
 
-    return (
-        <AuthContext.Provider value={{ user, signUp, signIn, logOut, setFriendCode: setFriendCodeForUser, friendCode }}>
-            {children}
-        </AuthContext.Provider>
-    );
+    const contextValue = {
+        user,
+        signUp,
+        signIn,
+        logOut,
+        setFriendCode: setFriendCodeForUser,
+        friendCode
+    };
+
+    return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {

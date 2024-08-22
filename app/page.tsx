@@ -21,7 +21,7 @@ import LoginForm from "@/components/LoginForm";
 const GlyphGenerator = dynamic(() => import('../components/GlyphGenerator'), { ssr: false })
 
 export default function Home() {
-    const { user, logOut } = useAuth();
+    const auth = useAuth();
 
     return (
         <>
@@ -38,17 +38,17 @@ export default function Home() {
                             Got questions?
                         </Link>
                     </div>
-                    {user ? (
+                    {auth?.user ? (
                         <>
-                            <Button onClick={logOut} className="mb-4">Log Out</Button>
+                            <Button onClick={auth.logOut} className="mb-4">Log Out</Button>
                             <GlyphGenerator/>
                         </>
                     ) : (
                         <LoginForm />
                     )}
                 </main>
-              <footer className="bg-muted text-muted-foreground py-6">
-                  <div
+                <footer className="bg-muted text-muted-foreground py-6">
+                    <div
                       className="container mx-auto px-4 md:px-6 flex flex-col sm:flex-row items-center justify-between">
                       <p className="text-sm mb-4 sm:mb-0">&copy; 2024 Quinta0. All rights reserved.</p>
                       <nav className="flex items-center gap-4">
