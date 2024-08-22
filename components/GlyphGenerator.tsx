@@ -17,6 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import {useAuth} from "@/components/AuthProvider";
 
 const glyphs = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
 
@@ -182,6 +183,7 @@ const GlyphGenerator = () => {
     const [filterGalaxy, setFilterGalaxy] = useState('All');
     const [sortBy, setSortBy] = useState('votes');
     const [filteredGallery, setFilteredGallery] = useState<GalleryItem[]>([]);
+    const { friendCode, setFriendCode } = useAuth();
 
     useEffect(() => {
         const filtered = gallery.filter(item =>
@@ -363,7 +365,7 @@ const GlyphGenerator = () => {
                 },
                 description: description,
                 tags: tags.split(',').map(tag => tag.trim()),
-                creatorId: friendshipCode,
+                creatorId: friendCode,
                 images: imageUrls,
                 galaxy: selectedGalaxy === "Not Specified" ? null : selectedGalaxy,
                 createdAt: new Date().toISOString()

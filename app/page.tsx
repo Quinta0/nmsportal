@@ -14,27 +14,39 @@ import dynamic from 'next/dynamic'
 import Head from "next/head";
 import Link from "next/link";
 import {Button} from "@/components/ui/button";
+import { useAuth } from '@/components/AuthProvider';
+import LoginForm from "@/components/LoginForm";
+
 
 const GlyphGenerator = dynamic(() => import('../components/GlyphGenerator'), { ssr: false })
 
 export default function Home() {
-  return (
-      <>
-          <Head>
-              <title>No Man's Sky Portal Address Tool</title>
-              <link rel="icon" href="/favicon.ico" sizes="any"/>
-              <meta name="description" content="Generate and share portal addresses for No Man's Sky"/>
-          </Head>
-          <div className="min-h-screen flex flex-col">
-          <Header/>
-              <main className="flex-grow container mx-auto px-4 py-8">
-                  <div className="mb-4 flex justify-center items-center text-center">
-                      <Link href="/info" className="text-blue-600 hover:underline">
-                          Got questions?
-                      </Link>
-                  </div>
-                  <GlyphGenerator/>
-              </main>
+    const { user, logOut } = useAuth();
+
+    return (
+        <>
+            <Head>
+                <title>No Man's Sky Portal Address Tool</title>
+                <link rel="icon" href="/favicon.ico" sizes="any"/>
+                <meta name="description" content="Generate and share portal addresses for No Man's Sky"/>
+            </Head>
+            <div className="min-h-screen flex flex-col">
+                <Header/>
+                <main className="flex-grow container mx-auto px-4 py-8">
+                    <div className="mb-4 flex justify-center items-center text-center">
+                        <Link href="/info" className="text-blue-600 hover:underline">
+                            Got questions?
+                        </Link>
+                    </div>
+                    {user ? (
+                        <>
+                            <Button onClick={logOut} className="mb-4">Log Out</Button>
+                            <GlyphGenerator/>
+                        </>
+                    ) : (
+                        <LoginForm />
+                    )}
+                </main>
               <footer className="bg-muted text-muted-foreground py-6">
                   <div
                       className="container mx-auto px-4 md:px-6 flex flex-col sm:flex-row items-center justify-between">
